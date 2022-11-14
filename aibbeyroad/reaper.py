@@ -112,99 +112,10 @@ def export():
 
 # Song Ensemble Functions
 
-def get_violin_song(file):
-
-    insert_midi(file)
-
-    track_effects(0)
-
-    del_track_effect(0,0)
-
-    track_effects(0)
-
-    export()
-
-    return True
-
-def get_little_song(file, fname):
-
-    change_filename(fname)
-
-    #ViolinSetting
-    track1 = 0
-    insert_midi(file)
-    cleanmiditake(track1)
-    track_effects(track1)
-    del_track_effect(track1,0)
-    track_effects(track1)
-    add_track_effect_preset(track1,'Polysix (KORG)', 'Reso Bell')
-
-    #KeyboardSetting track 1
-    track2 = 1
-    insert_midi(file)
-    cleanmiditake(track2)
-    track_effects(track2)
-    del_track_effect(track2, 0)
-    track_effects(track2)
-    add_track_effect_preset(track2, 'LegacyCell (KORG)', 4)
-
-    # Drms Setting track 1
-    track2 = 2
-    insert_midi(file)
-    cleanmiditake(track2)
-    track_effects(track2)
-    del_track_effect(track2, 0)
-    track_effects(track2)
-    add_track_effect_preset(track2, 'DrumComputer (Sugar Bytes) (2->20ch)', random.randint(0,10))
-    export()
-    delete_tracks()
-
-    return True
-
 
 def set_up_export(fname, format):
     change_filename(fname.replace('.mid', format))
 
-
-def get_song_3ch(file, fname, song3ch):
-
-    #song3ch=[['Polysix (KORG)', 'Reso Bell'],['LegacyCell (KORG)', 4],['DrumComputer (Sugar Bytes) (2->20ch)', random.randint(0,10)]]
-
-
-    change_filename(fname.replace('.mid',''))
-
-    #ViolinSetting
-    track1 = 0
-    insert_midi(file)
-    #cleanmiditake(track1)
-    track_effects(track1)
-    #del_track_effect(track1,0)
-    track_effects(track1)
-    add_track_effect_preset(track1,song3ch[0][0], song3ch[0][1])
-
-    #KeyboardSetting track 1
-    track2 = 1
-    insert_midi(file)
-    #cleanmiditake(track2)
-    track_effects(track2)
-    #del_track_effect(track2, 0)
-    track_effects(track2)
-    add_track_effect_preset(track2, song3ch[1][0], song3ch[1][1])
-
-    # Drms Setting track 1
-    track2 = 2
-    insert_midi(file)
-    #cleanmiditake(track2)
-    track_effects(track2)
-    #del_track_effect(track2, 0)
-    track_effects(track2)
-    add_track_effect_preset(track2, song3ch[2][0], song3ch[2][1])
-    #export()
-    #delete_tracks()
-
-    print('Song Generated: ' + fname.replace('.mid','.wav'))
-
-    return True
 
 def get_song_4ch(session,song4ch):
 
@@ -257,6 +168,28 @@ def get_song_4ch(session,song4ch):
     #delete_tracks()
 
     return True
+
+
+def record_session(session):
+    print(session.songemsemble)
+    tracknum = 0
+    for track in session.songemsemble:
+        print(track)
+        if 'Drum' in track[0] and session.drums_dir is not None:
+            insert_midi_drum(session.drums_type0_dir)
+        else:
+            insert_midi(session.get_melody_absolute_path())
+
+        track_effects(tracknum)
+        track_effects(tracknum)
+        add_track_effect_preset(tracknum, track[0], track[1])
+        tracknum += 1
+
+    export()
+    delete_tracks(tracknum-1)
+    print('Song Generated: ' + session.melody_name.replace('.mid', '.wav'))
+    return True
+
 
 def change_filename(filename):
 

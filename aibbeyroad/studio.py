@@ -115,8 +115,9 @@ class Session:
     def record_song(self):
         if self.songemsemble is None:
             return False
-        #reaper.record_session(self)
-        reaper.get_song_4ch(self, self.songemsemble)
+        reaper.record_session(self)
+        #reaper.get_song_4ch(self, self.songemsemble)
+
 
     def print_session(self):
         print('Session ID: ' + str(self.session_id))
@@ -139,10 +140,13 @@ class Session:
 def generate_song(seed, song_arrangements):
 
     session = Session()
+
     session.load_seed(seed)
+    session.songemsemble = song_arrangements
+
     session.generate_melody()
     session.generate_drums()
-    session.songemsemble = song_arrangements
+
     session.record_song()
 
     return True
