@@ -103,9 +103,7 @@ def export():
     fx = track.fxs[0]
     fx.close_ui()
 
-
     # Closes Project
-
 
     #project.close()
 
@@ -185,6 +183,7 @@ def record_session(session):
         add_track_effect_preset(tracknum, track[0], track[1])
         tracknum += 1
 
+    change_filename(session.melody_name.replace('.mid','.wav'))
     export()
     delete_tracks(tracknum-1)
     print('Song Generated: ' + session.melody_name.replace('.mid', '.wav'))
